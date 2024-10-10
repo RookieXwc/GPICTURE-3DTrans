@@ -4,7 +4,7 @@
 
 - [Location of Key Codes](#sparkles-location-of-key-codes)
 - [3D Pre-training Results](#car-3d-pre-training-results)
-- [Installation for GPICTURE-3DTrans](%EF%B8%8Finstallation-for-gpicture-3dtrans)
+- [Installation for GPICTURE-3DTrans](#hammerinstallation-for-gpicture-3dtrans)
 - [Run the Code](#rocketrun-the-code)
 
 
@@ -54,7 +54,7 @@ ONCE_ad-pt_ps_small
 
 👆 [BACK to Table of Contents -->](#booksoutline)
 
-## ⬇️Installation for GPICTURE-3DTrans
+## :hammer:Installation for GPICTURE-3DTrans
 
 1.You may refer to [INSTALL.md](docs/INSTALL.md) for the installation of `3DTrans`.
 
