@@ -54,7 +54,7 @@ ONCE_ad-pt_ps_small
 
 👆 [BACK to Table of Contents -->](#booksoutline)
 
-## ⚒️Installation for GPICTURE-3DTrans
+## ⬇️Installation for GPICTURE-3DTrans
 
 1.You may refer to [INSTALL.md](docs/INSTALL.md) for the installation of `3DTrans`.
 
