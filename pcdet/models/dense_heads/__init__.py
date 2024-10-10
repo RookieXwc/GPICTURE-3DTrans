@@ -13,6 +13,8 @@ from .IASSD_head import IASSD_Head
 from .anchor_head_semi import AnchorHeadSemi
 from .point_head_semi import PointHeadSemi
 from .anchor_head_pretrain import AnchorHeadSinglePretrain
+from .pretrain_head import PretrainHead
+from .pretrain_head_3D_seal import PretrainHead3D
 
 __all__ = {
     'AnchorHeadTemplate': AnchorHeadTemplate,
@@ -30,5 +32,7 @@ __all__ = {
     'ActiveAnchorHeadSingle1': ActiveAnchorHeadSingle1,
     'AnchorHeadSemi': AnchorHeadSemi,
     'PointHeadSemi': PointHeadSemi,
-    'AnchorHeadSinglePretrain': AnchorHeadSinglePretrain
+    'AnchorHeadSinglePretrain': AnchorHeadSinglePretrain,
+    'PretrainHead': PretrainHead,
+    'PretrainHead3D': PretrainHead3D
 }

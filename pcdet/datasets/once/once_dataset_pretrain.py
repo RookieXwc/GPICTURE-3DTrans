@@ -6,6 +6,7 @@ import numpy as np
 from PIL import Image
 import torch
 import torch.nn.functional as F
+import MinkowskiEngine as ME
 from pathlib import Path
 
 from ..dataset import DatasetTemplate
@@ -468,6 +469,44 @@ class ONCEDatasetPretrain_ADPT(ONCEPairDatasetTemplate):
         data_dict_1, data_dict_2 = self.prepare_data_pair(data_dict=input_dict)
         data_dict_1.pop('num_points_in_gt', None)
         data_dict_2.pop('num_points_in_gt', None)
+
+        if self.extra_process is not None and self.extra_process['TYPE'] == 'voxel':
+            # Transform to cylinder coordinate and scale for voxel size
+            pc_coords = torch.tensor(input_dict['points'][:, 0:3])
+            x, y, z = pc_coords.T
+            x = x / self.extra_process['CONFIG']['VOXEL_SIZE_X']
+            y = y / self.extra_process['CONFIG']['VOXEL_SIZE_Y']
+            z = z / self.extra_process['CONFIG']['VOXEL_SIZE_Z']
+            coords_voxel = torch.cat((x[:, None], y[:, None], z[:, None]), 1)
+
+            # Voxelization with MinkowskiEngine
+            discrete_coords, indexes, inverse_indexes = ME.utils.sparse_quantize(
+                coords_voxel.contiguous(), return_index=True, return_inverse=True
+            )
+
+            feats = input_dict['points'][:, 3:]
+            unique_feats = feats[indexes]
+            input_dict['discrete_coords'] = discrete_coords.numpy()
+            input_dict['ori_coords'] = pc_coords
+            input_dict['indexes'] = indexes.reshape(-1, 1).numpy()
+            input_dict['inverse_indexes'] = inverse_indexes.reshape(-1, 1).numpy()
+            input_dict['unique_feats'] = unique_feats
+
+            # prepare offline seal input
+            if self.generate_3d_input:
+                save_unique_feats = unique_feats[:, :1]
+                save_discrete_coords = discrete_coords.to(torch.int32).numpy()
+                save_dict = {
+                    'frame_id': info['frame_id'],
+                    'feats': save_unique_feats,
+                    'coords': save_discrete_coords
+                }
+                save_name = info['frame_id']
+                save_path = '/path/of/the/seal/input/'
+                save_path = save_path + save_name + '.pkl'
+                with open(save_path, "wb") as file:
+                    pickle.dump(save_dict, file)
+
         return data_dict_1, data_dict_2
         
 
